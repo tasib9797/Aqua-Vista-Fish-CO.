@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aqua Vista Fish Co. | Premium Aquarium Fish</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'aqua-blue': '#1a73e8',
+                        'aqua-teal': '#0d9488',
+                        'aqua-dark': '#0f172a',
+                        'aqua-light': '#e0f2fe',
+                        'coral': '#ff7e5f',
+                        'deep-blue': '#0c4a6e',
+                        'ocean-green': '#2dd4bf'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #0d9488 0%, #1a73e8 100%);
+        }
+        .admin-gradient {
+            background: linear-gradient(135deg, #0c4a6e 0%, #0d9488 100%);
+        }
+        .fish-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .fish-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        .water-effect {
+            background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.3) 100%);
+            backdrop-filter: blur(10px);
+        }
+        .bubble {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            animation: float 15s infinite ease-in-out;
+        }
+        @keyframes float {
+            0% { transform: translateY(0) translateX(0); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-1000px) translateX(200px); opacity: 0; }
+        }
+        .stats-card {
+            background: linear-gradient(135deg, #0d9488 0%, #2dd4bf 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .stock-low {
+            background-color: #fef3c7;
+            border-left: 4px solid #f59e0b;
+        }
+        .stock-out {
+            background-color: #fee2e2;
+            border-left: 4px solid #ef4444;
+        }
+        .stock-ok {
+            background-color: #d1fae5;
+            border-left: 4px solid #10b981;
+        }
+        .tab-active {
+            background-color: #0d9488;
+            color: white;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-aqua-light">
+    <!-- Header -->
+    <header class="gradient-bg text-white relative overflow-hidden">
+        <div class="bubble" style="width: 40px; height: 40px; left: 10%; animation-delay: 0s;"></div>
+        <div class="bubble" style="width: 20px; height: 20px; left: 20%; animation-delay: 1s;"></div>
+        <div class="bubble" style="width: 30px; height: 30px; left: 50%; animation-delay: 2s;"></div>
+        <div class="bubble" style="width: 25px; height: 25px; left: 70%; animation-delay: 3s;"></div>
+        <div class="bubble" style="width: 35px; height: 35px; left: 90%; animation-delay: 4s;"></div>
+        
+        <div class="container mx-auto px-4 py-6 relative z-10">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <i class="fas fa-fish text-3xl mr-3"></i>
+                    <h1 class="text-3xl font-bold">Aqua Vista Fish Co.</h1>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <div class="relative">
+                        <button id="cart-btn" class="text-white hover:text-aqua-light transition">
+                            <i class="fas fa-shopping-cart text-2xl"></i>
+                            <span id="cart-count" class="cart-badge hidden">0</span>
+                        </button>
+                    </div>
+                    <button id="admin-btn" class="bg-white text-aqua-blue px-4 py-2 rounded-lg font-semibold hover:bg-aqua-light transition flex items-center">
+                        <i class="fas fa-user-shield mr-2"></i>Admin Panel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md sticky top-0 z-40">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                <div class="flex space-x-6">
+                    <a href="#" class="text-aqua-teal font-semibold hover:text-aqua-blue transition">Home</a>
+                    <a href="#" class="text-gray-600 hover:text-aqua-blue transition">Freshwater</a>
+                    <a href="#" class="text-gray-600 hover:text-aqua-blue transition">Saltwater</a>
+                    <a href="#" class="text-gray-600 hover:text-aqua-blue transition">Plants</a>
+                    <a href="#" class="text-gray-600 hover:text-aqua-blue transition">Accessories</a>
+                </div>
+                <div class="w-full md:w-auto">
+                    <div class="flex">
+                        <input type="text" id="search-input" placeholder="Search for fish..." class="px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-aqua-blue w-full md:w-64">
+                        <button id="search-btn" class="bg-aqua-blue text-white px-4 py-2 rounded-r-lg hover:bg-blue-700 transition">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Hero Section -->
+        <section class="mb-12">
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                <div class="md:flex">
+                    <div class="md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
+                        <h2 class="text-4xl font-bold text-aqua-dark mb-4">Discover the Beauty of Aquatic Life</h2>
+                        <p class="text-gray-600 mb-6">Explore our wide collection of premium aquarium fish, carefully selected for their beauty and health. From vibrant tropical species to elegant marine creatures.</p>
+                        <div class="flex space-x-4">
+                            <button class="bg-aqua-teal text-white px-6 py-3 rounded-lg font-semibold hover:bg-teal-700 transition">Shop Now</button>
+                            <button class="border border-aqua-teal text-aqua-teal px-6 py-3 rounded-lg font-semibold hover:bg-aqua-teal hover:text-white transition">Learn More</button>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2">
+                        <img src="https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Aquarium" class="w-full h-64 md:h-full object-cover">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Filters -->
+        <section class="mb-8">
+            <div class="bg-white rounded-lg shadow p-6 water-effect">
+                <h3 class="text-xl font-semibold text-aqua-dark mb-4">Filter Fish</h3>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-gray-700 mb-2">Fish Type</label>
+                        <select id="type-filter" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-aqua-blue">
+                            <option value="all">All Types</option>
+                            <option value="freshwater">Freshwater</option>
+                            <option value="saltwater">Saltwater</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2">Price Range</label>
+                        <select id="price-filter" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-aqua-blue">
+                            <option value="all">All Prices</option>
+                            <option value="0-500">BDT 0 - 500</option>
+                            <option value="500-1000">BDT 500 - 1000</option>
+                            <option value="1000-2000">BDT 1000 - 2000</option>
+                            <option value="2000+">BDT 2000+</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2">Size</label>
+                        <select id="size-filter" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-aqua-blue">
+                            <option value="all">All Sizes</option>
+                            <option value="small">Small</option>
+                            <option value="medium">Medium</option>
+                            <option value="large">Large</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2">Stock Status</label>
+                        <select id="stock-filter" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-aqua-blue">
+                            <option value="all">All Stock</option>
+                            <option value="in-stock">In Stock</option>
+                            <option value="low-stock">Low Stock</option>
+                            <option value="out-of-stock">Out of Stock</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fish Products -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold text-aqua-dark mb-6">Featured Fish</h2>
+            <div id="fish-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Fish cards will be dynamically generated here -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-aqua-dark text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-fish text-2xl mr-2"></i>
+                        <h3 class="text-xl font-bold">Aqua Vista Fish Co.</h3>
+                    </div>
+                    <p class="text-gray-400">Your trusted partner for premium aquarium fish and supplies since 2010.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Home</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Shop</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">About Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Customer Service</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Shipping Info</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Returns</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">FAQ</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact Us</h4>
+                    <ul class="space-y-2">
+                        <li class="flex items-center">
+                            <i class="fas fa-map-marker-alt mr-2"></i>
+                            <span class="text-gray-400">123 Aquarium Street, Dhaka</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone mr-2"></i>
+                            <span class="text-gray-400">+880 1234-567890</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-2"></i>
+                            <span class="text-gray-400">info@aquavista.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2023 Aqua Vista Fish Co. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Modal -->
+    <div id="cart-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-hidden">
+            <div class="flex justify-between items-center p-6 border-b">
+                <h3 class="text-2xl font-bold text-aqua-dark">Your Cart</h3>
+                <button id="close-cart" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto max-h-96">
+                <div id="cart-items" class="space-y-4">
+                    <!-- Cart items will be dynamically generated here -->
+                </div>
+                <div id="empty-cart" class="text-center py-8">
+                    <i class="fas fa-shopping-cart text-5xl text-gray-300 mb-4"></i>
+                    <p class="text-gray-500">Your cart is empty</p>
+                </div>
+            </div>
+            <div class="p-6 border-t">
+                <div class="flex justify-between mb-4">
+                    <span class="text-lg font-semibold">Total:</span>
+                    <span id="cart-total" class="text-lg font-bold text-aqua-teal">BDT 0</span>
+                </div>
+                <button id="checkout-btn" class="w-full bg-aqua-teal text-white py-3 rounded-lg font-semibold hover:bg-teal-700 transition">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div id="checkout-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center p-6 border-b">
+                <h3 class="text-2xl font-bold text-aqua-dark">Checkout</h3>
+                <button id="close-checkout" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <form id="checkout-form">
+                    <div class="mb-6">
+                        <h4 class="text-lg font-semibold mb-4">Personal Information</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-gray-700 mb-2">Full Name</label>
+                                <input type="text" name="name" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-aqua-blue" required>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-2">Phone Number</label>
+                                <input type="tel" name="phone" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-aqua-blue" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-6">
+                        <h4 class="text-lg font-semibold mb-4">Shipping Address</h4>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-gray-700 mb-2">Street Address</label>
+                                <input type="text" name="address" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-aqua-blue" required>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-gray-700 mb-2">City</label>
+                                    <input type="text" name="city" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-aqua-blue" required>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 mb-2">ZIP Code</label>
+                                    <input type="text" name="zip" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-aqua-blue" required>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 mb-2">Country</label>
+                                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-aqua-blue" value="Bangladesh" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-6">
+                        <h4 class="text-lg font-semibold mb-4">Order Summary</h4>
+                        <div id="checkout-summary" class="bg-gray-50 p-4 rounded-lg">
+                            <!-- Order summary will be dynamically generated here -->
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <button type="button" id="back-to-cart" class="text-aqua-teal hover:text-teal-700 font-semibold">
+                            <i class="fas fa-arrow-left mr-2"></i>Back to Cart
+                        </button>
+                        <button type="submit" class="bg-aqua-teal text-white px-6 py-3 rounded-lg font-semibold hover:bg-teal-700 transition">Place Order</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div id="admin-login-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+            <div class="flex justify-between items-center p-6 border-b">
+                <h3 class="text-2xl font-bold text-aqua-dark">Admin Login</h3>
+                <button id="close-admin-login" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <form id="admin-login-form">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">Username</label>
+                        <input type="text" id="admin-username" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-aqua-blue" required>
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-gray-700 mb-2">Password</label>
+                        <input type="password" id="admin-password" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-aqua-blue" required>
+                    </div>
+                    <button type="submit" class="w-full bg-aqua-teal text-white py-3 rounded-lg font-semibold hover:bg-teal-700 transition">Login</button>
+                </form>
+              
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="admin-panel" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-7xl mx-4 max-h-[95vh] overflow-hidden admin-gradient text-white">
+            <div class="flex justify-between items-center p-6 border-b border-white/20">
+                <div class="flex items-center">
+                    <i class="fas fa-user-shield text-2xl mr-3"></i>
+                    <h3 class="text-2xl font-bold">Aqua Vista Admin Dashboard</h3>
+                </div>
+                <button id="close-admin" class="text-white/80 hover:text-white">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            
+            <div class="flex h-[80vh]">
+                <!-- Sidebar -->
+                <div class="w-1/4 bg-deep-blue/80 p-4">
+                    <div class="mb-8">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center mr-3">
+                                <i class="fas fa-user text-white"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold">Admin User</p>
+                                <p class="text-white/70 text-sm">tasib</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <nav class="space-y-2">
+                        <button id="tab-dashboard" class="w-full text-left px-4 py-3 rounded-lg tab-active flex items-center">
+                            <i class="fas fa-chart-pie mr-3"></i>Dashboard
+                        </button>
+                        <button id="tab-products" class="w-full text-left px-4 py-3 rounded-lg hover:bg-white/10 transition flex items-center">
+                            <i class="fas fa-fish mr-3"></i>Manage Products
+                        </button>
+                        <button id="tab-orders" class="w-full text-left px-4 py-3 rounded-lg hover:bg-white/10 transition flex items-center">
+                            <i class="fas fa-shopping-cart mr-3"></i>Orders
+                        </button>
+                        <button id="tab-stock" class="w-full text-left px-4 py-3 rounded-lg hover:bg-white/10 transition flex items-center">
+                            <i class="fas fa-boxes mr-3"></i>Stock Management
+                        </button>
+                    </nav>
+                </div>
+                
+                <!-- Main Content -->
+                <div class="w-3/4 p-6 overflow-y-auto">
+                    <!-- Dashboard Tab -->
+                    <div id="dashboard-content" class="fade-in">
+                        <h4 class="text-2xl font-bold mb-6">Dashboard Overview</h4>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                            <div class="stats-card">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <p class="text-white/80">Total Products</p>
+                                        <h5 class="text-3xl font-bold" id="total-products">0</h5>
+                                    </div>
+                                    <i class="fas fa-fish text-2xl opacity-70"></i>
+                                </div>
+                            </div>
+                            <div class="stats-card">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <p class="text-white/80">Total Orders</p>
+                                        <h5 class="text-3xl font-bold" id="total-orders">0</h5>
+                                    </div>
+                                    <i class="fas fa-shopping-cart text-2xl opacity-70"></i>
+                                </div>
+                            </div>
+                            <div class="stats-card">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <p class="text-white/80">Revenue</p>
+                                        <h5 class="text-3xl font-bold" id="total-revenue">BDT 0</h5>
+                                    </div>
+                                    <i class="fas fa-money-bill-wave text-2xl opacity-70"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-white/10 rounded-xl p-6 glass-effect">
+                                <h5 class="text-xl font-semibold mb-4">Low Stock Alert</h5>
+                                <div id="low-stock-list" class="space-y-3">
+                                    <!-- Low stock items will appear here -->
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white/10 rounded-xl p-6 glass-effect">
+                                <h5 class="text-xl font-semibold mb-4">Recent Orders</h5>
+                                <div id="recent-orders" class="space-y-3">
+                                    <!-- Recent orders will appear here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Products Tab -->
+                    <div id="products-content" class="hidden fade-in">
+                        <div class="flex justify-between items-center mb-6">
+                            <h4 class="text-2xl font-bold">Manage Products</h4>
+                            <button id="add-product-btn" class="bg-white text-aqua-teal px-4 py-2 rounded-lg font-semibold hover:bg-aqua-light transition">
+                                <i class="fas fa-plus mr-2"></i>Add New Product
+                            </button>
+                        </div>
+                        
+                        <div class="bg-white/10 rounded-xl p-6 glass-effect mb-6">
+                            <h5 class="text-xl font-semibold mb-4">Add New Fish</h5>
+                            <form id="add-fish-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-white mb-2">Fish Name</label>
+                                    <input type="text" id="fish-name" class="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-ocean-green" required>
+                                </div>
+                                <div>
+                                    <label class="block text-white mb-2">Price (BDT)</label>
+                                    <input type="number" id="fish-price" class="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-ocean-green" required>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-white mb-2">Description</label>
+                                    <textarea id="fish-description" class="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-ocean-green" rows="3" required></textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-white mb-2">Image URL</label>
+                                    <input type="url" id="fish-image" class="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-ocean-green" required>
+                                </div>
+                                <div>
+                                    <label class="block text-white mb-2">Type</label>
+                                    <select id="fish-type" class="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-ocean-green" required>
+                                        <option value="freshwater">Freshwater</option>
+                                        <option value="saltwater">Saltwater</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-white mb-2">Size</label>
+                                    <select id="fish-size" class="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-ocean-green" required>
+                                        <option value="small">Small</option>
+                                        <option value="medium">Medium</option>
+                                        <option value="large">Large</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-white mb-2">Temperament</label>
+                                    <select id="fish-temperament" class="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-ocean-green" required>
+                                        <option value="peaceful">Peaceful</option>
+                                        <option value="semi-aggressive">Semi-Aggressive</option>
+                                        <option value="aggressive">Aggressive</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-white mb-2">Stock Quantity</label>
+                                    <input type="number" id="fish-stock" class="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-ocean-green" value="10" required>
+                                </div>
+                                <div class="md:col-span-2 flex justify-end">
+                                    <button type="submit" class="bg-ocean-green text-white px-6 py-3 rounded-lg font-semibold hover:bg-teal-600 transition">
+                                        <i class="fas fa-plus-circle mr-2"></i>Add Fish
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <div class="bg-white/10 rounded-xl p-6 glass-effect">
+                            <h5 class="text-xl font-semibold mb-4">All Products</h5>
+                            <div id="admin-products-list" class="space-y-4 max-h-96 overflow-y-auto">
+                                <!-- Products will be dynamically generated here -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Orders Tab -->
+                    <div id="orders-content" class="hidden fade-in">
+                        <h4 class="text-2xl font-bold mb-6">Order Management</h4>
+                        <div id="orders-container" class="bg-white/10 rounded-xl p-6 glass-effect max-h-96 overflow-y-auto">
+                            <!-- Orders will be dynamically generated here -->
+                            <p class="text-white/70 text-center py-4">No orders yet</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Stock Management Tab -->
+                    <div id="stock-content" class="hidden fade-in">
+                        <h4 class="text-2xl font-bold mb-6">Stock Management</h4>
+                        <div id="stock-management" class="bg-white/10 rounded-xl p-6 glass-effect max-h-96 overflow-y-auto">
+                            <!-- Stock items will be dynamically generated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample fish data with stock information
+        let fishData = [
+            {
+                id: 1,
+                name: "Betta Fish",
+                price: 350,
+                description: "Beautiful Siamese fighting fish with vibrant colors. Perfect for small aquariums.",
+                image: "https://images.unsplash.com/photo-1625008730639-dfe2adefc0a8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
+                type: "freshwater",
+                size: "small",
+                temperament: "aggressive",
+                stock: 15
+            },
+            {
+                id: 2,
+                name: "Goldfish",
+                price: 250,
+                description: "Classic goldfish, easy to care for and perfect for beginners.",
+                image: "https://images.unsplash.com/photo-1552727451-6f5671e14d83?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
+                type: "freshwater",
+                size: "medium",
+                temperament: "peaceful",
+                stock: 8
+            },
+            {
+                id: 3,
+                name: "Clownfish",
+                price: 1200,
+                description: "Popular saltwater fish known for its bright orange color and white stripes.",
+                image: "https://images.unsplash.com/photo-1524704654690-b56c05c78a00?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
+                type: "saltwater",
+                size: "small",
+                temperament: "semi-aggressive",
+                stock: 3
+            },
+            {
+                id: 4,
+                name: "Angelfish",
+                price: 800,
+                description: "Elegant freshwater fish with distinctive triangular shape and long fins.",
+                image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
+                type: "freshwater",
+                size: "medium",
+                temperament: "semi-aggressive",
+                stock: 0
+            },
+            {
+                id: 5,
+                name: "Blue Tang",
+                price: 2500,
+                description: "Stunning saltwater fish with vibrant blue color and yellow tail.",
+                image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
+                type: "saltwater",
+                size: "medium",
+                temperament: "peaceful",
+                stock: 12
+            },
+            {
+                id: 6,
+                name: "Guppy",
+                price: 150,
+                description: "Colorful, live-bearing fish that's perfect for community tanks.",
+                image: "https://images.unsplash.com/photo-1591714018997-06b562cb99e9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
+                type: "freshwater",
+                size: "small",
+                temperament: "peaceful",
+                stock: 25
+            }
+        ];
+
+        // Cart data
+        let cart = [];
+        let orders = [];
+
+        // DOM elements
+        const fishContainer = document.getElementById('fish-container');
+        const cartModal = document.getElementById('cart-modal');
+        const cartItems = document.getElementById('cart-items');
+        const cartCount = document.getElementById('cart-count');
+        const cartTotal = document.getElementById('cart-total');
+        const emptyCart = document.getElementById('empty-cart');
+        const checkoutModal = document.getElementById('checkout-modal');
+        const checkoutSummary = document.getElementById('checkout-summary');
+        const adminPanel = document.getElementById('admin-panel');
+        const adminLoginModal = document.getElementById('admin-login-modal');
+        const ordersContainer = document.getElementById('orders-container');
+        const adminProductsList = document.getElementById('admin-products-list');
+        const stockManagement = document.getElementById('stock-management');
+        const lowStockList = document.getElementById('low-stock-list');
+        const recentOrders = document.getElementById('recent-orders');
+
+        // Admin tab elements
+        const tabDashboard = document.getElementById('tab-dashboard');
+        const tabProducts = document.getElementById('tab-products');
+        const tabOrders = document.getElementById('tab-orders');
+        const tabStock = document.getElementById('tab-stock');
+        const dashboardContent = document.getElementById('dashboard-content');
+        const productsContent = document.getElementById('products-content');
+        const ordersContent = document.getElementById('orders-content');
+        const stockContent = document.getElementById('stock-content');
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            renderFish();
+            setupEventListeners();
+            setupAdminTabs();
+        });
+
+        // Setup admin tabs
+        function setupAdminTabs() {
+            tabDashboard.addEventListener('click', function() {
+                setActiveTab('dashboard');
+                updateDashboard();
+            });
+            
+            tabProducts.addEventListener('click', function() {
+                setActiveTab('products');
+                updateAdminProducts();
+            });
+            
+            tabOrders.addEventListener('click', function() {
+                setActiveTab('orders');
+                updateOrders();
+            });
+            
+            tabStock.addEventListener('click', function() {
+                setActiveTab('stock');
+                updateStockManagement();
+            });
+        }
+
+        function setActiveTab(tabName) {
+            // Remove active class from all tabs
+            [tabDashboard, tabProducts, tabOrders, tabStock].forEach(tab => {
+                tab.classList.remove('tab-active');
+            });
+            
+            // Hide all content
+            [dashboardContent, productsContent, ordersContent, stockContent].forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            // Activate selected tab and show content
+            switch(tabName) {
+                case 'dashboard':
+                    tabDashboard.classList.add('tab-active');
+                    dashboardContent.classList.remove('hidden');
+                    break;
+                case 'products':
+                    tabProducts.classList.add('tab-active');
+                    productsContent.classList.remove('hidden');
+                    break;
+                case 'orders':
+                    tabOrders.classList.add('tab-active');
+                    ordersContent.classList.remove('hidden');
+                    break;
+                case 'stock':
+                    tabStock.classList.add('tab-active');
+                    stockContent.classList.remove('hidden');
+                    break;
+            }
+        }
+
+        // Render fish products
+        function renderFish(filteredFish = fishData) {
+            fishContainer.innerHTML = '';
+            
+            if (filteredFish.length === 0) {
+                fishContainer.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <i class="fas fa-fish text-5xl text-gray-300 mb-4"></i>
+                        <p class="text-gray-500 text-xl">No fish found matching your criteria</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            filteredFish.forEach(fish => {
+                const stockStatus = getStockStatus(fish.stock);
+                const fishCard = document.createElement('div');
+                fishCard.className = 'fish-card bg-white rounded-lg shadow-md overflow-hidden';
+                fishCard.innerHTML = `
+                    <div class="relative">
+                        <img src="${fish.image}" alt="${fish.name}" class="w-full h-48 object-cover">
+                        <span class="absolute top-2 right-2 ${stockStatus.badgeClass} text-white text-xs px-2 py-1 rounded-full">${stockStatus.text}</span>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-semibold text-aqua-dark">${fish.name}</h3>
+                            <span class="bg-aqua-teal text-white text-xs px-2 py-1 rounded-full">${fish.type}</span>
+                        </div>
+                        <p class="text-gray-600 mb-4 text-sm">${fish.description}</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-aqua-teal font-bold text-lg">BDT ${fish.price}</span>
+                            <button class="add-to-cart bg-aqua-blue text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition ${fish.stock === 0 ? 'opacity-50 cursor-not-allowed' : ''}" 
+                                    data-id="${fish.id}" ${fish.stock === 0 ? 'disabled' : ''}>
+                                <i class="fas fa-cart-plus mr-2"></i>${fish.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+                fishContainer.appendChild(fishCard);
+            });
+            
+            // Add event listeners to Add to Cart buttons
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', function() {
+                    const fishId = parseInt(this.getAttribute('data-id'));
+                    addToCart(fishId);
+                });
+            });
+        }
+
+        // Get stock status
+        function getStockStatus(stock) {
+            if (stock === 0) {
+                return { text: 'Out of Stock', badgeClass: 'bg-red-500' };
+            } else if (stock < 5) {
+                return { text: 'Low Stock', badgeClass: 'bg-yellow-500' };
+            } else {
+                return { text: 'In Stock', badgeClass: 'bg-green-500' };
+            }
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Cart button
+            document.getElementById('cart-btn').addEventListener('click', openCart);
+            
+            // Close cart button
+            document.getElementById('close-cart').addEventListener('click', closeCart);
+            
+            // Checkout button
+            document.getElementById('checkout-btn').addEventListener('click', openCheckout);
+            
+            // Close checkout button
+            document.getElementById('close-checkout').addEventListener('click', closeCheckout);
+            
+            // Back to cart button
+            document.getElementById('back-to-cart').addEventListener('click', function() {
+                closeCheckout();
+                openCart();
+            });
+            
+            // Checkout form submission
+            document.getElementById('checkout-form').addEventListener('submit', placeOrder);
+            
+            // Admin panel button
+            document.getElementById('admin-btn').addEventListener('click', openAdminLogin);
+            
+            // Close admin panel button
+            document.getElementById('close-admin').addEventListener('click', closeAdminPanel);
+            
+            // Close admin login button
+            document.getElementById('close-admin-login').addEventListener('click', closeAdminLogin);
+            
+            // Admin login form submission
+            document.getElementById('admin-login-form').addEventListener('submit', adminLogin);
+            
+            // Add fish form submission
+            document.getElementById('add-fish-form').addEventListener('submit', addNewFish);
+            
+            // Search functionality
+            document.getElementById('search-btn').addEventListener('click', applyFilters);
+            document.getElementById('search-input').addEventListener('keyup', function(event) {
+                if (event.key === 'Enter') {
+                    applyFilters();
+                }
+            });
+            
+            // Filter functionality
+            document.getElementById('type-filter').addEventListener('change', applyFilters);
+            document.getElementById('price-filter').addEventListener('change', applyFilters);
+            document.getElementById('size-filter').addEventListener('change', applyFilters);
+            document.getElementById('stock-filter').addEventListener('change', applyFilters);
+        }
+
+        // Apply filters and search
+        function applyFilters() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const typeFilter = document.getElementById('type-filter').value;
+            const priceFilter = document.getElementById('price-filter').value;
+            const sizeFilter = document.getElementById('size-filter').value;
+            const stockFilter = document.getElementById('stock-filter').value;
+            
+            const filteredFish = fishData.filter(fish => {
+                // Search term filter
+                if (searchTerm && !fish.name.toLowerCase().includes(searchTerm) && 
+                    !fish.description.toLowerCase().includes(searchTerm)) {
+                    return false;
+                }
+                
+                // Type filter
+                if (typeFilter !== 'all' && fish.type !== typeFilter) {
+                    return false;
+                }
+                
+                // Size filter
+                if (sizeFilter !== 'all' && fish.size !== sizeFilter) {
+                    return false;
+                }
+                
+                // Stock filter
+                if (stockFilter !== 'all') {
+                    if (stockFilter === 'in-stock' && fish.stock <= 0) {
+                        return false;
+                    } else if (stockFilter === 'low-stock' && (fish.stock >= 5 || fish.stock === 0)) {
+                        return false;
+                    } else if (stockFilter === 'out-of-stock' && fish.stock > 0) {
+                        return false;
+                    }
+                }
+                
+                // Price filter
+                if (priceFilter !== 'all') {
+                    if (priceFilter === '0-500' && (fish.price < 0 || fish.price > 500)) {
+                        return false;
+                    } else if (priceFilter === '500-1000' && (fish.price < 500 || fish.price > 1000)) {
+                        return false;
+                    } else if (priceFilter === '1000-2000' && (fish.price < 1000 || fish.price > 2000)) {
+                        return false;
+                    } else if (priceFilter === '2000+' && fish.price < 2000) {
+                        return false;
+                    }
+                }
+                
+                return true;
+            });
+            
+            renderFish(filteredFish);
+        }
+
+        // Cart functionality
+        function addToCart(fishId) {
+            const fish = fishData.find(f => f.id === fishId);
+            if (!fish || fish.stock === 0) return;
+            
+            const existingItem = cart.find(item => item.id === fishId);
+            if (existingItem) {
+                if (existingItem.quantity < fish.stock) {
+                    existingItem.quantity += 1;
+                } else {
+                    showNotification(`Only ${fish.stock} ${fish.name} available in stock!`);
+                    return;
+                }
+            } else {
+                cart.push({
+                    id: fish.id,
+                    name: fish.name,
+                    price: fish.price,
+                    image: fish.image,
+                    quantity: 1
+                });
+            }
+            
+            updateCart();
+            showNotification(`${fish.name} added to cart!`);
+        }
+
+        function updateCart() {
+            // Update cart count
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            cartCount.textContent = totalItems;
+            
+            if (totalItems > 0) {
+                cartCount.classList.remove('hidden');
+            } else {
+                cartCount.classList.add('hidden');
+            }
+            
+            // Update cart items
+            cartItems.innerHTML = '';
+            
+            if (cart.length === 0) {
+                emptyCart.classList.remove('hidden');
+                return;
+            }
+            
+            emptyCart.classList.add('hidden');
+            
+            cart.forEach(item => {
+                const fish = fishData.find(f => f.id === item.id);
+                const cartItem = document.createElement('div');
+                cartItem.className = 'flex items-center border-b pb-4';
+                cartItem.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-lg">
+                    <div class="ml-4 flex-grow">
+                        <h4 class="font-semibold">${item.name}</h4>
+                        <p class="text-aqua-teal font-bold">BDT ${item.price}</p>
+                        ${fish.stock < 5 ? `<p class="text-xs text-yellow-600">Only ${fish.stock} left in stock</p>` : ''}
+                    </div>
+                    <div class="flex items-center">
+                        <button class="decrease-quantity text-gray-500 hover:text-gray-700" data-id="${item.id}">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <span class="mx-2">${item.quantity}</span>
+                        <button class="increase-quantity text-gray-500 hover:text-gray-700" data-id="${item.id}">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <button class="remove-item text-red-500 hover:text-red-700 ml-4" data-id="${item.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                cartItems.appendChild(cartItem);
+            });
+            
+            // Update cart total
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            cartTotal.textContent = `BDT ${total}`;
+            
+            // Add event listeners to cart item buttons
+            document.querySelectorAll('.decrease-quantity').forEach(button => {
+                button.addEventListener('click', function() {
+                    const itemId = parseInt(this.getAttribute('data-id'));
+                    decreaseQuantity(itemId);
+                });
+            });
+            
+            document.querySelectorAll('.increase-quantity').forEach(button => {
+                button.addEventListener('click', function() {
+                    const itemId = parseInt(this.getAttribute('data-id'));
+                    increaseQuantity(itemId);
+                });
+            });
+            
+            document.querySelectorAll('.remove-item').forEach(button => {
+                button.addEventListener('click', function() {
+                    const itemId = parseInt(this.getAttribute('data-id'));
+                    removeFromCart(itemId);
+                });
+            });
+        }
+
+        function decreaseQuantity(fishId) {
+            const item = cart.find(item => item.id === fishId);
+            if (item) {
+                if (item.quantity > 1) {
+                    item.quantity -= 1;
+                } else {
+                    cart = cart.filter(item => item.id !== fishId);
+                }
+                updateCart();
+            }
+        }
+
+        function increaseQuantity(fishId) {
+            const item = cart.find(item => item.id === fishId);
+            const fish = fishData.find(f => f.id === fishId);
+            
+            if (item && fish) {
+                if (item.quantity < fish.stock) {
+                    item.quantity += 1;
+                    updateCart();
+                } else {
+                    showNotification(`Only ${fish.stock} ${fish.name} available in stock!`);
+                }
+            }
+        }
+
+        function removeFromCart(fishId) {
+            cart = cart.filter(item => item.id !== fishId);
+            updateCart();
+        }
+
+        function openCart() {
+            cartModal.classList.remove('hidden');
+        }
+
+        function closeCart() {
+            cartModal.classList.add('hidden');
+        }
+
+        function openCheckout() {
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            
+            closeCart();
+            checkoutModal.classList.remove('hidden');
+            
+            // Update checkout summary
+            checkoutSummary.innerHTML = '';
+            
+            cart.forEach(item => {
+                const summaryItem = document.createElement('div');
+                summaryItem.className = 'flex justify-between mb-2';
+                summaryItem.innerHTML = `
+                    <span>${item.name} x ${item.quantity}</span>
+                    <span>BDT ${item.price * item.quantity}</span>
+                `;
+                checkoutSummary.appendChild(summaryItem);
+            });
+            
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const totalElement = document.createElement('div');
+            totalElement.className = 'flex justify-between font-bold mt-4 pt-4 border-t';
+            totalElement.innerHTML = `
+                <span>Total</span>
+                <span>BDT ${total}</span>
+            `;
+            checkoutSummary.appendChild(totalElement);
+        }
+
+        function closeCheckout() {
+            checkoutModal.classList.add('hidden');
+        }
+
+        function placeOrder(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const order = {
+                id: Date.now(),
+                customer: {
+                    name: formData.get('name'),
+                    phone: formData.get('phone'),
+                    address: `${formData.get('address')}, ${formData.get('city')}, ${formData.get('zip')}, Bangladesh`
+                },
+                items: [...cart],
+                total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+                date: new Date().toLocaleDateString(),
+                status: 'Processing'
+            };
+            
+            // Update stock
+            order.items.forEach(item => {
+                const fish = fishData.find(f => f.id === item.id);
+                if (fish) {
+                    fish.stock -= item.quantity;
+                }
+            });
+            
+            orders.push(order);
+            cart = [];
+            updateCart();
+            closeCheckout();
+            updateOrders();
+            updateStockManagement();
+            updateDashboard();
+            
+            showNotification('Order placed successfully!');
+            event.target.reset();
+        }
+
+        // Admin panel functionality
+        function openAdminLogin() {
+            adminLoginModal.classList.remove('hidden');
+        }
+
+        function closeAdminLogin() {
+            adminLoginModal.classList.add('hidden');
+        }
+
+        function adminLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('admin-username').value;
+            const password = document.getElementById('admin-password').value;
+            
+            if (username === 'tasib' && password === '97974452501') {
+                closeAdminLogin();
+                adminPanel.classList.remove('hidden');
+                setActiveTab('dashboard');
+                updateDashboard();
+            } else {
+                alert('Invalid username or password!');
+            }
+        }
+
+        function closeAdminPanel() {
+            adminPanel.classList.add('hidden');
+        }
+
+        function addNewFish(event) {
+            event.preventDefault();
+            
+            const newFish = {
+                id: fishData.length > 0 ? Math.max(...fishData.map(f => f.id)) + 1 : 1,
+                name: document.getElementById('fish-name').value,
+                price: parseInt(document.getElementById('fish-price').value),
+                description: document.getElementById('fish-description').value,
+                image: document.getElementById('fish-image').value,
+                type: document.getElementById('fish-type').value,
+                size: document.getElementById('fish-size').value,
+                temperament: document.getElementById('fish-temperament').value,
+                stock: parseInt(document.getElementById('fish-stock').value)
+            };
+            
+            fishData.push(newFish);
+            renderFish();
+            updateAdminProducts();
+            updateStockManagement();
+            updateDashboard();
+            event.target.reset();
+            
+            showNotification('New fish added successfully!');
+        }
+
+        function updateAdminProducts() {
+            adminProductsList.innerHTML = '';
+            
+            if (fishData.length === 0) {
+                adminProductsList.innerHTML = '<p class="text-white/70 text-center py-4">No products found</p>';
+                return;
+            }
+            
+            fishData.forEach(fish => {
+                const stockStatus = getStockStatus(fish.stock);
+                const productElement = document.createElement('div');
+                productElement.className = `p-4 rounded-lg ${stockStatus.badgeClass === 'bg-red-500' ? 'stock-out' : stockStatus.badgeClass === 'bg-yellow-500' ? 'stock-low' : 'stock-ok'}`;
+                productElement.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center">
+                            <img src="${fish.image}" alt="${fish.name}" class="w-16 h-16 object-cover rounded-lg mr-4">
+                            <div>
+                                <h5 class="font-semibold">${fish.name}</h5>
+                                <p class="text-sm text-gray-600">${fish.type} • ${fish.size} • ${fish.temperament}</p>
+                                <p class="text-aqua-teal font-bold">BDT ${fish.price}</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-semibold ${stockStatus.badgeClass === 'bg-red-500' ? 'text-red-600' : stockStatus.badgeClass === 'bg-yellow-500' ? 'text-yellow-600' : 'text-green-600'}">
+                                ${stockStatus.text} (${fish.stock})
+                            </p>
+                            <div class="mt-2 flex space-x-2">
+                                <button class="edit-fish bg-blue-500 text-white px-3 py-1 rounded text-sm" data-id="${fish.id}">
+                                    <i class="fas fa-edit mr-1"></i>Edit
+                                </button>
+                                <button class="delete-fish bg-red-500 text-white px-3 py-1 rounded text-sm" data-id="${fish.id}">
+                                    <i class="fas fa-trash mr-1"></i>Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                adminProductsList.appendChild(productElement);
+            });
+            
+            // Add event listeners to edit and delete buttons
+            document.querySelectorAll('.edit-fish').forEach(button => {
+                button.addEventListener('click', function() {
+                    const fishId = parseInt(this.getAttribute('data-id'));
+                    editFish(fishId);
+                });
+            });
+            
+            document.querySelectorAll('.delete-fish').forEach(button => {
+                button.addEventListener('click', function() {
+                    const fishId = parseInt(this.getAttribute('data-id'));
+                    deleteFish(fishId);
+                });
+            });
+        }
+
+        function editFish(fishId) {
+            const fish = fishData.find(f => f.id === fishId);
+            if (!fish) return;
+            
+            // In a real application, you would show a modal with a form to edit the fish
+            // For this demo, we'll just show an alert
+            const newStock = prompt(`Edit stock for ${fish.name}:`, fish.stock);
+            if (newStock !== null && !isNaN(newStock)) {
+                fish.stock = parseInt(newStock);
+                updateAdminProducts();
+                updateStockManagement();
+                updateDashboard();
+                renderFish();
+                showNotification(`${fish.name} stock updated to ${newStock}`);
+            }
+        }
+
+        function deleteFish(fishId) {
+            const fish = fishData.find(f => f.id === fishId);
+            if (!fish) return;
+            
+            if (confirm(`Are you sure you want to delete ${fish.name}?`)) {
+                fishData = fishData.filter(f => f.id !== fishId);
+                updateAdminProducts();
+                updateStockManagement();
+                updateDashboard();
+                renderFish();
+                showNotification(`${fish.name} deleted successfully`);
+            }
+        }
+
+        function updateOrders() {
+            ordersContainer.innerHTML = '';
+            
+            if (orders.length === 0) {
+                ordersContainer.innerHTML = '<p class="text-white/70 text-center py-4">No orders yet</p>';
+                return;
+            }
+            
+            orders.forEach(order => {
+                const orderElement = document.createElement('div');
+                orderElement.className = 'bg-white/10 rounded-lg p-4 mb-4 glass-effect';
+                orderElement.innerHTML = `
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <h5 class="font-semibold">Order #${order.id}</h5>
+                            <p class="text-sm text-white/70">${order.customer.name} • ${order.customer.phone}</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-aqua-teal font-bold">BDT ${order.total}</span>
+                            <p class="text-sm text-white/70">${order.date}</p>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <p class="text-sm"><strong>Address:</strong> ${order.customer.address}</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold mb-1 text-sm">Items:</p>
+                        <ul class="list-disc list-inside text-sm">
+                            ${order.items.map(item => `<li>${item.name} x ${item.quantity} - BDT ${item.price * item.quantity}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div class="mt-2 flex justify-between items-center">
+                        <span class="text-xs text-white/70">Status: ${order.status}</span>
+                        <button class="update-status bg-ocean-green text-white px-3 py-1 rounded text-xs" data-id="${order.id}">
+                            Update Status
+                        </button>
+                    </div>
+                `;
+                ordersContainer.appendChild(orderElement);
+            });
+            
+            // Add event listeners to update status buttons
+            document.querySelectorAll('.update-status').forEach(button => {
+                button.addEventListener('click', function() {
+                    const orderId = parseInt(this.getAttribute('data-id'));
+                    updateOrderStatus(orderId);
+                });
+            });
+        }
+
+        function updateOrderStatus(orderId) {
+            const order = orders.find(o => o.id === orderId);
+            if (!order) return;
+            
+            const newStatus = prompt('Update order status:', order.status);
+            if (newStatus) {
+                order.status = newStatus;
+                updateOrders();
+                updateDashboard();
+                showNotification(`Order #${orderId} status updated to ${newStatus}`);
+            }
+        }
+
+        function updateStockManagement() {
+            stockManagement.innerHTML = '';
+            
+            if (fishData.length === 0) {
+                stockManagement.innerHTML = '<p class="text-white/70 text-center py-4">No products found</p>';
+                return;
+            }
+            
+            fishData.forEach(fish => {
+                const stockStatus = getStockStatus(fish.stock);
+                const stockElement = document.createElement('div');
+                stockElement.className = `p-4 rounded-lg mb-3 ${stockStatus.badgeClass === 'bg-red-500' ? 'stock-out' : stockStatus.badgeClass === 'bg-yellow-500' ? 'stock-low' : 'stock-ok'}`;
+                stockElement.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center">
+                            <img src="${fish.image}" alt="${fish.name}" class="w-12 h-12 object-cover rounded-lg mr-3">
+                            <div>
+                                <h5 class="font-semibold">${fish.name}</h5>
+                                <p class="text-sm text-gray-600">Current Stock: <span class="font-bold ${stockStatus.badgeClass === 'bg-red-500' ? 'text-red-600' : stockStatus.badgeClass === 'bg-yellow-500' ? 'text-yellow-600' : 'text-green-600'}">${fish.stock}</span></p>
+                            </div>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="add-stock bg-green-500 text-white px-3 py-1 rounded text-sm" data-id="${fish.id}">
+                                <i class="fas fa-plus mr-1"></i>Add Stock
+                            </button>
+                            <button class="reduce-stock bg-yellow-500 text-white px-3 py-1 rounded text-sm" data-id="${fish.id}">
+                                <i class="fas fa-minus mr-1"></i>Reduce Stock
+                            </button>
+                        </div>
+                    </div>
+                `;
+                stockManagement.appendChild(stockElement);
+            });
+            
+            // Add event listeners to stock buttons
+            document.querySelectorAll('.add-stock').forEach(button => {
+                button.addEventListener('click', function() {
+                    const fishId = parseInt(this.getAttribute('data-id'));
+                    adjustStock(fishId, 'add');
+                });
+            });
+            
+            document.querySelectorAll('.reduce-stock').forEach(button => {
+                button.addEventListener('click', function() {
+                    const fishId = parseInt(this.getAttribute('data-id'));
+                    adjustStock(fishId, 'reduce');
+                });
+            });
+        }
+
+        function adjustStock(fishId, action) {
+            const fish = fishData.find(f => f.id === fishId);
+            if (!fish) return;
+            
+            const amount = parseInt(prompt(`Enter amount to ${action}:`, '5'));
+            if (amount && !isNaN(amount)) {
+                if (action === 'add') {
+                    fish.stock += amount;
+                    showNotification(`Added ${amount} to ${fish.name} stock. New stock: ${fish.stock}`);
+                } else {
+                    if (fish.stock >= amount) {
+                        fish.stock -= amount;
+                        showNotification(`Reduced ${amount} from ${fish.name} stock. New stock: ${fish.stock}`);
+                    } else {
+                        showNotification(`Cannot reduce ${amount} from ${fish.name}. Only ${fish.stock} available.`);
+                        return;
+                    }
+                }
+                
+                updateStockManagement();
+                updateAdminProducts();
+                updateDashboard();
+                renderFish();
+            }
+        }
+
+        function updateDashboard() {
+            // Update stats
+            document.getElementById('total-products').textContent = fishData.length;
+            document.getElementById('total-orders').textContent = orders.length;
+            document.getElementById('total-revenue').textContent = `BDT ${orders.reduce((sum, order) => sum + order.total, 0)}`;
+            
+            // Update low stock list
+            const lowStockItems = fishData.filter(fish => fish.stock > 0 && fish.stock < 5);
+            lowStockList.innerHTML = '';
+            
+            if (lowStockItems.length === 0) {
+                lowStockList.innerHTML = '<p class="text-white/70 text-center py-2">No low stock items</p>';
+            } else {
+                lowStockItems.forEach(fish => {
+                    const item = document.createElement('div');
+                    item.className = 'flex justify-between items-center py-2 border-b border-white/10';
+                    item.innerHTML = `
+                        <span>${fish.name}</span>
+                        <span class="text-yellow-300 font-semibold">${fish.stock} left</span>
+                    `;
+                    lowStockList.appendChild(item);
+                });
+            }
+            
+            // Update recent orders
+            recentOrders.innerHTML = '';
+            const recentOrdersList = orders.slice(-3).reverse();
+            
+            if (recentOrdersList.length === 0) {
+                recentOrders.innerHTML = '<p class="text-white/70 text-center py-2">No recent orders</p>';
+            } else {
+                recentOrdersList.forEach(order => {
+                    const item = document.createElement('div');
+                    item.className = 'flex justify-between items-center py-2 border-b border-white/10';
+                    item.innerHTML = `
+                        <div>
+                            <p class="font-semibold">Order #${order.id}</p>
+                            <p class="text-sm text-white/70">${order.customer.name}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-ocean-green font-semibold">BDT ${order.total}</p>
+                            <p class="text-sm text-white/70">${order.date}</p>
+                        </div>
+                    `;
+                    recentOrders.appendChild(item);
+                });
+            }
+        }
+
+        // Utility function to show notifications
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-4 right-4 bg-aqua-teal text-white px-6 py-3 rounded-lg shadow-lg z-50 fade-in';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
